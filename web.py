@@ -10,14 +10,26 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
+        archivo = open('home.html')
+        html = archivo.read()
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
         self.wfile.write(self.get_response().encode("utf-8"))
 
+    def get_html(self, path, qs):
+        return f"""
+        <h1>Proyecto {path} Autor: {qs['autor']}</h1>
+"""
+    def valida_autor(self):
+        if 'autor' in self.query_data():
+            return True
+        else:
+            return False
+
     def get_response(self):
         return f"""
-    <h1> Hola Web </h1>
+    <h1> Proyecto: web-uno Autor: LandonEnciso </h1>
     <p> URL Parse Result : {self.url()}         </p>
     <p> Path Original: {self.path}         </p>
     <p> Headers: {self.headers}      </p>
